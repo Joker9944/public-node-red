@@ -23,9 +23,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.node-red.loadbalancer.server.port=1880
-      - traefik.http.routers.pi-hole-dashboard.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
-      - traefik.http.routers.pi-hole-dashboard.entrypoints=websecure
-      - traefik.http.routers.pi-hole-dashboard.tls.certresolver=tls-resolver
-      - traefik.http.routers.pi-hole-dashboard.middlewares=pi-hole-dashboard-auth,pi-hole-dashboard-path
-      - traefik.http.middlewares.pi-hole-dashboard-path.addprefix.prefix=/admin/
-      - traefik.http.middlewares.pi-hole-dashboard-auth.basicauth.usersfile=/etc/traefik/htpasswd
+      - traefik.http.routers.node-red.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
+      - traefik.http.routers.node-red.entrypoints=websecure
+      - traefik.http.routers.node-red.tls.certresolver=tls-resolver
+      - traefik.http.routers.node-red.middlewares=node-red-auth
+      - traefik.http.middlewares.node-red-auth.basicauth.usersfile=/etc/traefik/htpasswd
