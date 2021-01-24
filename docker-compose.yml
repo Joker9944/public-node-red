@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik
+    healthcheck:
+      test: traefik healthcheck --ping
+    ports:
+      - "443:443"
+    environment:
+      - TRAEFIK_CERTIFICATESRESOLVERS_tls-resolver_ACME_EMAIL=$ACME_EMAIL
+    volumes:
+      - ./secrets/acme.json:/etc/traefik/acme.json
+      - ./secrets/htpasswd:/etc/traefik/htpasswd:ro
+      - ./conf/traefik.yml:/traefik.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ
+    volumes:
+      - './etc/node-red/data:/data'
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.node-red.loadbalancer.server.port=1880
+      - traefik.http.routers.pi-hole-dashboard.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
+      - traefik.http.routers.pi-hole-dashboard.entrypoints=websecure
+      - traefik.http.routers.pi-hole-dashboard.tls.certresolver=tls-resolver
+      - traefik.http.routers.pi-hole-dashboard.middlewares=pi-hole-dashboard-auth,pi-hole-dashboard-path
+      - traefik.http.middlewares.pi-hole-dashboard-path.addprefix.prefix=/admin/
+      - traefik.http.middlewares.pi-hole-dashboard-auth.basicauth.usersfile=/etc/traefik/htpasswd

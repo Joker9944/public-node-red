@@ -1,0 +1,20 @@
+log:
+  level: INFO
+
+ping: {}
+
+entryPoints:
+  websecure:
+    address: ":443"
+
+providers:
+  docker:
+    exposedByDefault: false
+
+certificatesResolvers:
+  tls-resolver:
+    acme:
+      storage: /etc/traefik/acme.json
+      tlsChallenge: {}
+      httpChallenge:
+        entryPoint: websecure
