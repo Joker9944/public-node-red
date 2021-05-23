@@ -6,6 +6,14 @@ ping: {}
 entryPoints:
   websecure:
     address: ":443"
+  metrics:
+    address: ":9090"
+  metrics-treafik:
+    address: ":8082"
+
+metrics:
+  prometheus:
+    entryPoint: metrics-treafik
 
 providers:
   docker:
