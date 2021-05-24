@@ -1,10 +1,8 @@
 version: '3.7'
 
 networks: 
-  public-node-red:
+  default:
     driver: bridge
-  host:
-    external: true
 
 services:
   traefik:
@@ -22,7 +20,7 @@ services:
       - ./conf/traefik.yml:/traefik.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - public-node-red
+      - default
   node-red:
     image: nodered/node-red:latest
     environment:
@@ -39,7 +37,7 @@ services:
       - traefik.http.routers.node-red.middlewares=node-red-auth
       - traefik.http.middlewares.node-red-auth.basicauth.usersfile=/etc/traefik/htpasswd
     networks:
-      - public-node-red
+      - default
   prometheus:
     image: prom/prometheus:latest
     volumes:
@@ -53,5 +51,6 @@ services:
       - traefik.http.routers.prometheus.middlewares=prometheus-auth
       - traefik.http.middlewares.prometheus-auth.basicauth.usersfile=/etc/traefik/htpasswd
     networks:
-      - host
-      - public-node-red
+      - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
