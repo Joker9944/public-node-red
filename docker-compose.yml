@@ -42,6 +42,7 @@ services:
     image: prom/prometheus:latest
     volumes:
       - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./etc/prometheus/data:/prometheus
     labels:
       - traefik.enable=true
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
