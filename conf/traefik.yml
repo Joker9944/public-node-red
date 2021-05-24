@@ -17,6 +17,7 @@ metrics:
 
 providers:
   docker:
+    network: public-node-red_default
     exposedByDefault: false
 
 certificatesResolvers:
