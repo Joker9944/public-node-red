@@ -1,12 +1,17 @@
 version: '3.7'
 
+networks: 
+  default:
+    driver: bridge
+
 services:
   traefik:
-    image: traefik
+    image: traefik:latest
     healthcheck:
       test: traefik healthcheck --ping
     ports:
       - "443:443"
+      - "9090:9090"
     environment:
       - TRAEFIK_CERTIFICATESRESOLVERS_tls-resolver_ACME_EMAIL=$ACME_EMAIL
     volumes:
@@ -14,12 +19,15 @@ services:
       - ./secrets/htpasswd:/etc/traefik/htpasswd:ro
       - ./conf/traefik.yml:/traefik.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
   node-red:
     image: nodered/node-red:latest
     environment:
       - TZ
+      - PROMETHEUS_COLLECT_DEFAULT_METRICS=true
     volumes:
-      - './etc/node-red/data:/data'
+      - ./etc/node-red/data:/data
     labels:
       - traefik.enable=true
       - traefik.http.services.node-red.loadbalancer.server.port=1880
@@ -28,3 +36,22 @@ services:
       - traefik.http.routers.node-red.tls.certresolver=tls-resolver
       - traefik.http.routers.node-red.middlewares=node-red-auth
       - traefik.http.middlewares.node-red-auth.basicauth.usersfile=/etc/traefik/htpasswd
+    networks:
+      - default
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./etc/prometheus/data:/prometheus
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+      - traefik.http.routers.prometheus.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
+      - traefik.http.routers.prometheus.entrypoints=metrics
+      - traefik.http.routers.prometheus.tls.certresolver=tls-resolver
+      - traefik.http.routers.prometheus.middlewares=prometheus-auth
+      - traefik.http.middlewares.prometheus-auth.basicauth.usersfile=/etc/traefik/htpasswd
+    networks:
+      - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
