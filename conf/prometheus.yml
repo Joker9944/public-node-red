@@ -8,7 +8,7 @@ scrape_configs:
       - targets: ['localhost:9090']
   - job_name: traefik
     static_configs:
-      - targets: ['public-node-red_traefik_1.public-node-red_default:8082']
+      - targets: ['public-node-red_traefik_1.public-node-red:8082']
   - job_name: node-red
     static_configs:
-      - targets: ['public-node-red_node-red_1.public-node-red_default:1880']
+      - targets: ['public-node-red_node-red_1.public-node-red:1880']
