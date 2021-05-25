@@ -21,6 +21,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
   node-red:
     image: nodered/node-red:latest
     environment:
@@ -62,10 +64,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=true
-      - traefik.http.services.home-assistant.loadbalancer.server.port=8123
+      - traefik.http.services.home-assistant.loadbalancer.server.address=http://host.docker.internal:8123
       - traefik.http.routers.home-assistant.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
-      - traefik.http.routers.home-assistant.entrypoints=metrics
+      - traefik.http.routers.home-assistant.entrypoints=home-assistant
       - traefik.http.routers.home-assistant.tls.certresolver=tls-resolver
-      - traefik.http.routers.home-assistant.middlewares=home-assistant-auth
-      - traefik.http.middlewares.home-assistant-auth.basicauth.usersfile=/etc/traefik/htpasswd
     network_mode: host

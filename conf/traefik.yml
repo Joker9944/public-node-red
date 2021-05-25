@@ -10,6 +10,8 @@ entryPoints:
     address: ":9090"
   metrics-treafik:
     address: ":8082"
+  home-assistant:
+    address: ":8123"
 
 metrics:
   prometheus:
@@ -27,3 +29,10 @@ certificatesResolvers:
       tlsChallenge: {}
       httpChallenge:
         entryPoint: websecure
+
+#http:
+#  services:
+#    home-assistant:
+#       loadBalancer:
+#        servers:
+#          - address: "http://host.docker.internal:8123"
