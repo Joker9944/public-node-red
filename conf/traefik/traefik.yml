@@ -1,7 +1,12 @@
+---
 log:
   level: INFO
 
 ping: {}
+
+api:
+  dashboard: true
+  insecure: true
 
 entryPoints:
   websecure:
@@ -21,6 +26,8 @@ providers:
   docker:
     network: public-node-red_default
     exposedByDefault: false
+  file:
+    directory: "/dynamic"
 
 certificatesResolvers:
   tls-resolver:
@@ -29,16 +36,3 @@ certificatesResolvers:
       tlsChallenge: {}
       httpChallenge:
         entryPoint: websecure
-
-http:
-  services:
-    home-assistant:
-      loadBalancer:
-        servers:
-          - url: 'http://host.docker.internal:8123/'
-  routers:
-    home-assistant:
-      rule: Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
-      entrypoints: home-assistant
-      tls:
-        certresolver: tls-resolver

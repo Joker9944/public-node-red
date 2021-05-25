@@ -1,0 +1,13 @@
+---
+http:
+  services:
+    home-assistant:
+      loadBalancer:
+        servers:
+          - url: 'http://host.docker.internal:8123/'
+  routers:
+    home-assistant:
+      rule: Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
+      entrypoints: home-assistant
+      tls:
+        certresolver: tls-resolver

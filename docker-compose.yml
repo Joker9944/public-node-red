@@ -1,3 +1,4 @@
+---
 version: '3.7'
 
 networks: 
@@ -10,14 +11,17 @@ services:
     healthcheck:
       test: traefik healthcheck --ping
     ports:
+      - "80:80"
       - "443:443"
+      - "8080:8080"
       - "9090:9090"
     environment:
       - TRAEFIK_CERTIFICATESRESOLVERS_tls-resolver_ACME_EMAIL=$ACME_EMAIL
     volumes:
       - ./secrets/acme.json:/etc/traefik/acme.json
       - ./secrets/htpasswd:/etc/traefik/htpasswd:ro
-      - ./conf/traefik.yml:/traefik.yml:ro
+      - ./conf/traefik/traefik.yml:/traefik.yml:ro
+      - ./conf/traefik/home-assistant-config.yml:/dynamic/home-assistant-config.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - default
