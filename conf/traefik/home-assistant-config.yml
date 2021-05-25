@@ -8,6 +8,7 @@ http:
   routers:
     home-assistant:
       rule: 'Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)'
+      service: home-assistant
       entrypoints:
         - home-assistant
       tls:
