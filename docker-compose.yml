@@ -62,10 +62,4 @@ services:
     volumes:
       - ./etc/home-assistant/config:/config
       - /etc/localtime:/etc/localtime:ro
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.home-assistant.loadbalancer.server.address=http://host.docker.internal:8123
-      - traefik.http.routers.home-assistant.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
-      - traefik.http.routers.home-assistant.entrypoints=home-assistant
-      - traefik.http.routers.home-assistant.tls.certresolver=tls-resolver
     network_mode: host
