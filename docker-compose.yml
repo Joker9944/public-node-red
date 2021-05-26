@@ -17,6 +17,8 @@ services:
       - "9090:9090"
     environment:
       - TRAEFIK_CERTIFICATESRESOLVERS_tls-resolver_ACME_EMAIL=$ACME_EMAIL
+      - DOMAIN
+      - HOME_ASSISTAND_SUB_DOMAIN
     volumes:
       - ./secrets/acme.json:/etc/traefik/acme.json
       - ./secrets/htpasswd:/etc/traefik/htpasswd:ro

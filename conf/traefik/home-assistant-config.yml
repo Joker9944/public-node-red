@@ -7,7 +7,7 @@ http:
           - url: 'http://host.docker.internal:8123/'
   routers:
     home-assistant:
-      rule: 'Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)'
+      rule: 'Host(`{{ env "HOME_ASSISTAND_SUB_DOMAIN" }}.{{ env "DOMAIN" }}`)'
       service: home-assistant
       entrypoints:
         - home-assistant
