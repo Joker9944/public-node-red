@@ -15,8 +15,6 @@ entryPoints:
     address: ":9090"
   metrics-treafik:
     address: ":8082"
-  home-assistant:
-    address: ":8123"
 
 metrics:
   prometheus:
@@ -30,7 +28,7 @@ providers:
     directory: "/dynamic"
 
 certificatesResolvers:
-  tls-resolver:
+  http-challenge-resolver:
     acme:
       storage: /etc/traefik/acme.json
       tlsChallenge: {}

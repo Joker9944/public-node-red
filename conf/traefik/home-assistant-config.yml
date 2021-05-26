@@ -10,6 +10,6 @@ http:
       rule: 'Host(`{{ env "HOME_ASSISTAND_SUB_DOMAIN" }}.{{ env "DOMAIN" }}`)'
       service: home-assistant
       entrypoints:
-        - home-assistant
+        - websecure
       tls:
-        certresolver: tls-resolver
+        certresolver: http-challenge-resolver

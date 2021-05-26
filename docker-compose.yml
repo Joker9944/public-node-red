@@ -16,7 +16,7 @@ services:
       - "8080:8080"
       - "9090:9090"
     environment:
-      - TRAEFIK_CERTIFICATESRESOLVERS_tls-resolver_ACME_EMAIL=$ACME_EMAIL
+      - TRAEFIK_CERTIFICATESRESOLVERS_http-challenge-resolver_ACME_EMAIL=$ACME_EMAIL
       - DOMAIN
       - HOME_ASSISTAND_SUB_DOMAIN
     volumes:
@@ -41,7 +41,7 @@ services:
       - traefik.http.services.node-red.loadbalancer.server.port=1880
       - traefik.http.routers.node-red.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
       - traefik.http.routers.node-red.entrypoints=websecure
-      - traefik.http.routers.node-red.tls.certresolver=tls-resolver
+      - traefik.http.routers.node-red.tls.certresolver=http-challenge-resolver
       - traefik.http.routers.node-red.middlewares=node-red-auth
       - traefik.http.middlewares.node-red-auth.basicauth.usersfile=/etc/traefik/htpasswd
     networks:
@@ -56,7 +56,7 @@ services:
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
       - traefik.http.routers.prometheus.rule=Host(`$NODE_RED_SUB_DOMAIN.$DOMAIN`)
       - traefik.http.routers.prometheus.entrypoints=metrics
-      - traefik.http.routers.prometheus.tls.certresolver=tls-resolver
+      - traefik.http.routers.prometheus.tls.certresolver=http-challenge-resolver
       - traefik.http.routers.prometheus.middlewares=prometheus-auth
       - traefik.http.middlewares.prometheus-auth.basicauth.usersfile=/etc/traefik/htpasswd
     networks:
