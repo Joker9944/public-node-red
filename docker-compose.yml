@@ -46,6 +46,8 @@ services:
       - traefik.http.middlewares.node-red-auth.basicauth.usersfile=/etc/traefik/htpasswd
     networks:
       - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
   prometheus:
     image: prom/prometheus:latest
     volumes:
